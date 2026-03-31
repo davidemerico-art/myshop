@@ -36,7 +36,8 @@ export default function Home() {
 
       <div className="grid grid-cols-4 gap-6 p-6">
         {filtered.map((p) => (
-          <ProductCard key={p.id} product={p} addToCart={() => {}} />
+          <ProductCard key={p.id} product={p} />
+          
         ))}
       </div>
     </div>
