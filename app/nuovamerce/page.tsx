@@ -1,0 +1,48 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+export default function NuovaMerce() {
+  const router = useRouter();
+
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [image, setImage] = useState("");
+
+  const save = () => {
+    alert("Merce salvata (simulazione)");
+    router.push("/home");
+  };
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl mb-4">Nuovo Prodotto</h1>
+
+      <input
+        placeholder="Nome"
+        className="block border p-2 mb-2"
+        onChange={(e) => setName(e.target.value)}
+      />
+
+      <input
+        placeholder="Prezzo"
+        className="block border p-2 mb-2"
+        onChange={(e) => setPrice(e.target.value)}
+      />
+
+      <input
+        placeholder="Immagine URL"
+        className="block border p-2 mb-2"
+        onChange={(e) => setImage(e.target.value)}
+      />
+
+      <button
+        onClick={save}
+        className="bg-blue-500 text-white px-4 py-2"
+      >
+        Salva
+      </button>
+    </div>
+  );
+}
