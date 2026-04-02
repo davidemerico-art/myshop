@@ -1,61 +1,53 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Product from "./Product";
+import { useCart } from "../context/CartContext";
 
-type ProductProps = {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-  image: string;
+type Props = {
+  product: any;
 };
 
-export default function Product({
-  id,
-  name,
-  price,
-  category,
-  image,
-}: ProductProps) {
+export default function ProductCard({ product }: Props) {
+  const { addToCart } = useCart();
+  const [qty, setQty] = useState(1);
   const router = useRouter();
 
-  const handleBuy = () => {
-    alert(`Hai acquistato: ${name}`);
+  const handleAdd = () => {
+    addToCart(product, qty);
+    alert(`${product.name} aggiunto al carrello (${qty})`);
+  };
+
+  const goToProduct = () => {
+    router.push(`/prodotto/${product.id}`);
   };
 
   return (
-    <div className="card animate-fade-in-up flex flex-col h-full group">
-
-      {/* IMMAGINE */}
-      <div
-        className="relative overflow-hidden shrink-0 h-[240px] sm:h-[280px] bg-gray-200 cursor-pointer"
-        onClick={() => router.push(`/prodotto/${id}`)}
-      >
-        {image ? (
-          <img
-            src={image}
-            alt={name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div className="h-full flex flex-col items-center justify-center text-gray-400 p-6 text-center">
-            <span className="text-sm font-medium">No Image</span>
-          </div>
-        )}
-      </div>
-
-      {/* DETTAGLI */}
-      <div className="p-4 flex flex-col flex-1">
-        <h2 className="text-lg font-semibold">{name}</h2>
-        <p className="text-gray-500 text-sm">{category}</p>
-
-        <div className="mt-auto">
-          <p className="text-xl font-bold">€{price}</p>
-        </div>
-      </div>
+    <div className="bg-white p-4 rounded shadow flex flex-col">
 
      
+      <div onClick={goToProduct} className="cursor-pointer">
+        <Product {...product} />
       </div>
-   
+
+      {/* QUANTITÀ */}
+      <input
+        type="number"
+        min={1}
+        value={qty}
+        onChange={(e) => setQty(Number(e.target.value))}
+        className="border p-1 w-16 mt-2"
+      />
+
+      {/* ADD TO CART */}
+      <button
+        onClick={handleAdd}
+        className="bg-yellow-400 mt-2 px-4 py-2 rounded w-full"
+      >
+        Aggiungi al carrello
+      </button>
+
+    </div>
   );
 }

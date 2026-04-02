@@ -26,18 +26,12 @@ export default function ProductCard({ product }: Props) {
   return (
     <div className="bg-white p-4 rounded shadow flex flex-col">
 
-      {/*  PRODOTTO (clic immagine) */}
+      {/* CLICK SOLO QUI */}
       <div onClick={goToProduct} className="cursor-pointer">
-        <Product
-          id={product.id}
-          name={product.name}
-          price={product.price}
-          category={product.category}
-          image={product.image}
-        />
+        <Product {...product} />
       </div>
 
-      {/* quantità */}
+      {/* QUANTITÀ */}
       <input
         type="number"
         min={1}
@@ -46,13 +40,14 @@ export default function ProductCard({ product }: Props) {
         className="border p-1 w-16 mt-2"
       />
 
-      {/* bottone carrello */}
+      {/* ADD TO CART */}
       <button
         onClick={handleAdd}
         className="bg-yellow-400 mt-2 px-4 py-2 rounded w-full"
       >
         Aggiungi al carrello
       </button>
+
     </div>
   );
 }

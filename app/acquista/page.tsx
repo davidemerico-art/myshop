@@ -13,12 +13,9 @@ export default function AcquistaPage() {
   );
 
   const handleBuy = () => {
-    alert("Acquisto completato con successo ");
+    alert("Acquisto completato con successo 🎉");
 
-    // svuota carrello (lo aggiungiamo nel context)
-    clearCart();
-    localStorage.removeItem("cart");
-
+    clearCart(); 
     router.push("/home");
   };
 
@@ -29,7 +26,6 @@ export default function AcquistaPage() {
         Conferma acquisto
       </h1>
 
-      {/* RIEPILOGO */}
       <div className="border p-4 rounded mb-4">
         {cart.length === 0 ? (
           <p>Nessun prodotto da acquistare</p>
@@ -37,20 +33,16 @@ export default function AcquistaPage() {
           cart.map((item: any) => (
             <div key={item.id} className="mb-2">
               <p className="font-bold">{item.name}</p>
-              <p>
-                {item.quantity} x €{item.price}
-              </p>
+              <p>{item.quantity} x €{item.price}</p>
             </div>
           ))
         )}
       </div>
 
-      {/* TOTALE */}
       <h2 className="text-xl font-bold mb-4">
         Totale: €{total}
       </h2>
 
-      {/* BUY BUTTON */}
       <button
         onClick={handleBuy}
         className="bg-green-500 text-white px-6 py-3 rounded"

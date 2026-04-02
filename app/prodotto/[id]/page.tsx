@@ -1,36 +1,90 @@
+"use client";
+
 import { products } from "@/app/data/merce";
 import Navbar from "@/app/components/Navbar";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/app/context/CartContext";
+import { useState, useMemo } from "react";
 
 type Props = {
-  params: Promise<{
+  params: {
     id: string;
-  }>;
+  };
 };
 
-export default async function ProductPage({ params }: Props) {
-  const { id } = await params;
+export default function ProductPage({ params }: Props) {
+  const router = useRouter();
+  const { addToCart } = useCart();
+  const [qty, setQty] = useState(1);
 
-  const product = products.find((p) => p.id === Number(id));
-  
+  // 🔥 unisci prodotti statici + nuovi
+  const product = useMemo(() => {
+    const saved =
+      typeof window !== "undefined"
+        ? JSON.parse(localStorage.getItem("products") || "[]")
+        : [];
+
+    const allProducts = [...products, ...saved];
+
+    return allProducts.find((p) => p.id === Number(params.id));
+  }, [params.id]);
 
   if (!product) {
     return <p className="p-6">Prodotto non trovato</p>;
   }
-<Navbar />
+
+  const handleAdd = () => {
+    addToCart(product, qty);
+    alert(`${product.name} aggiunto al carrello (${qty})`);
+  };
+
   return (
-    
-    <div className="p-10 max-w-3xl mx-auto">
-      <img
-        src={product.image}
-        className="w-full h-96 object-cover rounded"
-      />
+    <div>
+      <Navbar />
 
-      <h1 className="text-3xl font-bold mt-4">{product.name}</h1>
-      <p className="text-gray-600">{product.category}</p>
+      <div className="p-10 max-w-3xl mx-auto">
 
-      <p className="text-2xl font-bold mt-4">€{product.price}</p>
+        <img
+          src={product.image}
+          className="w-full h-96 object-cover rounded"
+        />
+
+        <h1 className="text-3xl font-bold mt-4">
+          {product.name}
+        </h1>
+
+        <p className="text-gray-600">{product.category}</p>
+
+        <p className="text-2xl font-bold mt-4">
+          €{product.price}
+        </p>
+
+        {/* QTY */}
+        <input
+          type="number"
+          min={1}
+          value={qty}
+          onChange={(e) => setQty(Number(e.target.value))}
+          className="border p-2 mt-4 w-20"
+        />
+
+        {/* CART */}
+        <button
+          onClick={handleAdd}
+          className="bg-yellow-400 mt-4 px-4 py-2 rounded w-full"
+        >
+          Aggiungi al carrello
+        </button>
+
+        {/* HOME */}
+        <button
+          onClick={() => router.push("/home")}
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded w-full"
+        >
+          Torna alla Home
+        </button>
+
+      </div>
     </div>
-    
-    
   );
 }
