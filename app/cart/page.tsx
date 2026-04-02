@@ -11,11 +11,17 @@ export default function CartPage() {
     (sum: number, item: any) => sum + item.price * item.quantity,
     0
   );
-
+ 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Carrello</h1>
-
+       <button
+        onClick={() => router.push("/home")}
+        className="mt-4 bg-blue-500 text-white px-4 py-2"
+      >
+        Torna alla Home
+      </button>
+<br />
       {cart.length === 0 ? (
         <p>Carrello vuoto</p>
       ) : (
@@ -31,11 +37,13 @@ export default function CartPage() {
 
       <h2 className="mt-4 font-bold">Totale: €{total}</h2>
 
+
       <button
-        onClick={() => router.push("/home")}
-        className="mt-4 bg-blue-500 text-white px-4 py-2"
+     
+        onClick={() => router.push("/acquista")}
+        className="mt-4 bg-red-500 text-white px-4 py-2"
       >
-        Torna alla Home
+       acquista
       </button>
     </div>
   );

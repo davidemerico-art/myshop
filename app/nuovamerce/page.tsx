@@ -2,18 +2,32 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Navbar from "../components/Navbar";
+import { products } from "../data/merce";
 
 export default function NuovaMerce() {
   const router = useRouter();
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
   const [image, setImage] = useState("");
 
+
   const save = () => {
-    alert("Merce salvata (simulazione)");
-    router.push("/home");
+  const newProduct = {
+    id: products.length + 1,
+    name,
+    price: Number(price),
+    category,
+    image,
   };
+
+  products.push(newProduct);
+
+  alert("Merce salvata");
+  router.push("/home");
+};
 
   return (
     <div className="p-6">
@@ -29,6 +43,11 @@ export default function NuovaMerce() {
         placeholder="Prezzo"
         className="block border p-2 mb-2"
         onChange={(e) => setPrice(e.target.value)}
+      />
+      <input
+        placeholder="Categoria"
+        className="block border p-2 mb-2"
+        onChange={(e) => setCategory(e.target.value)}
       />
 
       <input
