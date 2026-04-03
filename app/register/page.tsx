@@ -20,9 +20,9 @@ export default function Register() {
     // salva utente
     localStorage.setItem("user", JSON.stringify(user));
 
-    alert("Registrazione completata ✅");
+    alert("Registrazione completata ");
 
-    router.push("/");
+    router.push("/")
   };
 
   return (

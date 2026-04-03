@@ -13,7 +13,7 @@ export default function Navbar() {
 
         {/* LOGO */}
         <h1 className="text-xl font-bold text-gray-800 dark:text-white">
-          🛒 MyShop
+           MyShop
         </h1>
 
         {/* SEARCH */}

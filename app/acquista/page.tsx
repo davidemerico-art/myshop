@@ -13,7 +13,7 @@ export default function AcquistaPage() {
   );
 
   const handleBuy = () => {
-    alert("Acquisto completato con successo 🎉");
+    alert("Acquisto completato con successo ");
 
     clearCart(); 
     router.push("/home");

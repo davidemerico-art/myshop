@@ -2,52 +2,74 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Product from "./Product";
 import { useCart } from "../context/CartContext";
+import { products } from "../data/merce";
 
-type Props = {
-  product: any;
-};
-
-export default function ProductCard({ product }: Props) {
+export default function ProductPage({ params }: any) {
   const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
   const router = useRouter();
+
+  const id = Number(params?.id);
+
+  
+  const product = products.find((p) => p.id === id);
+
+    // sicurezza: se id non valido o prodotto non trovato
+  if (!product) {
+    return (
+      <div className="p-6">
+        <h1 className="text-xl font-bold">Prodotto non trovato</h1>
+
+        <button
+          onClick={() => router.push("/home")}
+          className="mt-4 bg-gray-500 text-white px-4 py-2 rounded"
+        >
+          Torna alla Home
+        </button>
+      </div>
+    );
+  }
 
   const handleAdd = () => {
     addToCart(product, qty);
     alert(`${product.name} aggiunto al carrello (${qty})`);
   };
 
-  const goToProduct = () => {
-    router.push(`/prodotto/${product.id}`);
-  };
-
   return (
-    <div className="bg-white p-4 rounded shadow flex flex-col">
+    <div className="p-6">
+      <img
+        src={product.image}
+        alt={product.name}
+        className="w-64 mb-4 rounded"
+      />
 
-     
-      <div onClick={goToProduct} className="cursor-pointer">
-        <Product {...product} />
-      </div>
+      <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
+      <p className="mb-4 text-gray-600">{product.category}</p>
 
-      {/* QUANTITÀ */}
+      <p className="mb-4 font-semibold">Prezzo: €{product.price}</p>
+
       <input
         type="number"
         min={1}
         value={qty}
         onChange={(e) => setQty(Number(e.target.value))}
-        className="border p-1 w-16 mt-2"
+        className="border p-1 w-16 mb-4"
       />
 
-      {/* ADD TO CART */}
       <button
         onClick={handleAdd}
-        className="bg-yellow-400 mt-2 px-4 py-2 rounded w-full"
+        className="bg-yellow-400 px-4 py-2 rounded"
       >
         Aggiungi al carrello
       </button>
 
+      <button
+        onClick={() => router.push("/home")}
+        className="ml-4 bg-gray-500 text-white px-4 py-2 rounded"
+      >
+        Torna alla Home
+      </button>
     </div>
   );
 }
