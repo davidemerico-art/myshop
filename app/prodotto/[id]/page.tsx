@@ -4,7 +4,7 @@ import { products } from "@/app/data/merce";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/app/context/CartContext";
-import { useState, useMemo } from "react";
+import { useState, useMemo, use } from "react";
 
 type Props = {
   params: {
@@ -17,7 +17,9 @@ export default function ProductPage({ params }: Props) {
   const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
 
-  // 🔥 unisci prodotti statici + nuovi
+ 
+  const resolvedParams = use(params) as { id: string };
+  const id = Number(resolvedParams.id);
   const product = useMemo(() => {
     const saved =
       typeof window !== "undefined"
@@ -26,8 +28,8 @@ export default function ProductPage({ params }: Props) {
 
     const allProducts = [...products, ...saved];
 
-    return allProducts.find((p) => p.id === Number(params.id));
-  }, [params.id]);
+    return allProducts.find((p) => p.id === id);
+  }, [id]);
 
   if (!product) {
     return <p className="p-6">Prodotto non trovato</p>;

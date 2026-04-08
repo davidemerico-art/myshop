@@ -16,11 +16,7 @@ export default function Navbar() {
            MyShop
         </h1>
 
-        {/* SEARCH */}
-        <input
-          className="w-1/2 max-w-md p-2 border rounded-lg text-black"
-          placeholder="Cerca prodotti..."
-        />
+        
 
         {/* MENU */}
         <div className="flex items-center gap-6">

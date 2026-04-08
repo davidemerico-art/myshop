@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Navbar from "./../components/Navbar";
-import Banner from "./../components/Banner";
+
 import ProductCard from "./../components/ProductCard";
-import { products as initialProducts } from "./../data/merce";
+import { products as initialProducts } from "./../data/sconti";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -47,7 +47,7 @@ export default function Home() {
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
-      <Banner />
+      
 
       <div className="p-4 flex gap-4 items-center flex-wrap">
         <input
