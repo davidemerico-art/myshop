@@ -26,6 +26,22 @@ export default function ProductPage({ params }: any) {
     return <p className="p-6">Prodotto non trovato</p>;
   }
 
+  // Calcolo sconto se presente
+  let prezzoScontato = product.price;
+  let percentualeSconto = 0;
+  if (product.sconto) {
+    if (typeof product.sconto === "string" && product.sconto.includes("%")) {
+      percentualeSconto = parseInt(product.sconto);
+      prezzoScontato = product.price * (1 - percentualeSconto / 100);
+    } else if (typeof product.sconto === "number" && product.sconto < 1) {
+      percentualeSconto = Math.round((1 - product.sconto) * 100);
+      prezzoScontato = product.price * product.sconto;
+    } else if (typeof product.sconto === "number") {
+      percentualeSconto = product.sconto;
+      prezzoScontato = product.price * (1 - percentualeSconto / 100);
+    }
+  }
+
   const handleAdd = () => {
     addToCart(product, qty);
     alert(`${product.name} aggiunto al carrello (${qty})`);
@@ -34,7 +50,15 @@ export default function ProductPage({ params }: any) {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
-      <p className="mb-4">Prezzo: €{product.price}</p>
+      {percentualeSconto > 0 ? (
+        <>
+          <p className="line-through text-gray-400">Prezzo: €{product.price}</p>
+          <p className="text-green-600 font-bold">Sconto: -{percentualeSconto}%</p>
+          <p className="text-red-600 font-bold mb-4">Ora: €{prezzoScontato.toFixed(2)}</p>
+        </>
+      ) : (
+        <p className="mb-4">Prezzo: €{product.price}</p>
+      )}
 
       <input
         type="number"

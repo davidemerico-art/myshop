@@ -68,10 +68,10 @@ export default function Home() {
         </select>
 
         <button
-          onClick={() => router.push("/nuovamerce")}
+          onClick={() => router.push("/nuovisconti")}
           className="bg-green-500 text-white px-4 py-2"
         >
-          Aggiungi merce
+          Aggiungi merce in sconto
         </button>
       </div>
 

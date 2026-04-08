@@ -10,7 +10,7 @@ export default function ProductCard({ product }: any) {
   const [qty, setQty] = useState(1);
 
   const handleAdd = (e: any) => {
-    e.stopPropagation(); // 🔥 evita che apra la pagina prodotto
+    e.stopPropagation(); 
     addToCart(product, qty);
     alert(`${product.name} aggiunto al carrello (${qty})`);
   };
@@ -18,6 +18,23 @@ export default function ProductCard({ product }: any) {
   const goToProduct = () => {
     router.push(`/prodotto/${product.id}`);
   };
+
+  // Calcolo sconto se presente
+  let prezzoScontato = product.price;
+  let percentualeSconto = 0;
+  if (product.sconto) {
+    // Supporta sia "20%" che 0.8
+    if (typeof product.sconto === "string" && product.sconto.includes("%")) {
+      percentualeSconto = parseInt(product.sconto);
+      prezzoScontato = product.price * (1 - percentualeSconto / 100);
+    } else if (typeof product.sconto === "number" && product.sconto < 1) {
+      percentualeSconto = Math.round((1 - product.sconto) * 100);
+      prezzoScontato = product.price * product.sconto;
+    } else if (typeof product.sconto === "number") {
+      percentualeSconto = product.sconto;
+      prezzoScontato = product.price * (1 - percentualeSconto / 100);
+    }
+  }
 
   return (
     <div
@@ -33,7 +50,15 @@ export default function ProductCard({ product }: any) {
 
       {/* info base */}
       <h3 className="font-bold">{product.name}</h3>
-      <p>€{product.price}</p>
+      {percentualeSconto > 0 ? (
+        <>
+          <p className="line-through text-gray-400">€{product.price}</p>
+          <p className="text-green-600 font-bold">Sconto: -{percentualeSconto}%</p>
+          <p className="text-red-600 font-bold">Ora: €{prezzoScontato.toFixed(2)}</p>
+        </>
+      ) : (
+        <p>€{product.price}</p>
+      )}
 
       {/* quantità */}
       <input
