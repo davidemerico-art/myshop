@@ -2,8 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useCart } from "@/app/context/CartContext";
-import { products as prodottiNormali } from "@/app/data/merce";
-import { products as prodottiScontati } from "@/app/data/sconti";
+import { products } from "@/app/data/merce";
 
 export default function ProductPage({ params }: any) {
   const { addToCart } = useCart();
@@ -18,31 +17,27 @@ export default function ProductPage({ params }: any) {
         ? JSON.parse(localStorage.getItem("products") || "[]")
         : [];
 
-    // Cerca prima tra i prodotti normali
-    let found = [...prodottiNormali, ...saved].find((p) => p.id === id);
-    if (found) return found;
-    // Se non trovato, cerca tra i prodotti scontati
-    found = prodottiScontati.find((p) => p.id === id);
-    return found;
+    const allProducts = [...products, ...saved];
+
+    return allProducts.find((p) => p.id === id);
   }, [id]);
 
   if (!product) {
     return <p className="p-6">Prodotto non trovato</p>;
   }
 
-  // Calcolo sconto se presente (compatibile sia con prodotti normali che scontati)
+  // Calcolo sconto se presente
   let prezzoScontato = product.price;
   let percentualeSconto = 0;
-  const sconto = product.sconto ?? product.sconti;
-  if (sconto) {
-    if (typeof sconto === "string" && sconto.includes("%")) {
-      percentualeSconto = parseInt(sconto);
+  if (product.sconto) {
+    if (typeof product.sconto === "string" && product.sconto.includes("%")) {
+      percentualeSconto = parseInt(product.sconto);
       prezzoScontato = product.price * (1 - percentualeSconto / 100);
-    } else if (typeof sconto === "number" && sconto < 1) {
-      percentualeSconto = Math.round((1 - sconto) * 100);
-      prezzoScontato = product.price * sconto;
-    } else if (typeof sconto === "number") {
-      percentualeSconto = sconto;
+    } else if (typeof product.sconto === "number" && product.sconto < 1) {
+      percentualeSconto = Math.round((1 - product.sconto) * 100);
+      prezzoScontato = product.price * product.sconto;
+    } else if (typeof product.sconto === "number") {
+      percentualeSconto = product.sconto;
       prezzoScontato = product.price * (1 - percentualeSconto / 100);
     }
   }
@@ -63,10 +58,6 @@ export default function ProductPage({ params }: any) {
         </>
       ) : (
         <p className="mb-4">Prezzo: €{product.price}</p>
-      )}
-
-      {product.image && (
-        <img src={product.image} alt={product.name} className="mb-4 max-h-48 rounded shadow" />
       )}
 
       <input

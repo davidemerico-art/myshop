@@ -9,11 +9,13 @@ export default function ProductCard({ product }: any) {
   const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
 
+
   const handleAdd = (e: any) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     addToCart(product, qty);
     alert(`${product.name} aggiunto al carrello (${qty})`);
   };
+
 
   const goToProduct = () => {
     router.push(`/prodotto/${product.id}`);
@@ -23,7 +25,6 @@ export default function ProductCard({ product }: any) {
   let prezzoScontato = product.price;
   let percentualeSconto = 0;
   if (product.sconto) {
-    // Supporta sia "20%" che 0.8
     if (typeof product.sconto === "string" && product.sconto.includes("%")) {
       percentualeSconto = parseInt(product.sconto);
       prezzoScontato = product.price * (1 - percentualeSconto / 100);
@@ -46,10 +47,12 @@ export default function ProductCard({ product }: any) {
         src={product.image}
         alt={product.name}
         className="w-full h-40 object-cover rounded"
+        onError={e => (e.currentTarget.src = 'https://via.placeholder.com/300x200?text=No+Image')}
       />
 
       {/* info base */}
       <h3 className="font-bold">{product.name}</h3>
+      <p className="text-gray-500 text-sm mb-1">{product.category}</p>
       {percentualeSconto > 0 ? (
         <>
           <p className="line-through text-gray-400">€{product.price}</p>
